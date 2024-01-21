@@ -16,6 +16,7 @@ class ContactSerializer(serializers.ModelSerializer):
         model = Contact
         fields = ['first_name', 'last_name', 'country', 'city', 'street', 'url', 'phone', 'image']
 
+
 class ContactGroupSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(many=True)
 
