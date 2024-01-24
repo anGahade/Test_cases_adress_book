@@ -1,5 +1,7 @@
 import django_filters
 
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from .models import ContactGroup, ContactActivityLog
 from .serializers import ContactGroupSerializer
 from django_filters import rest_framework as filters
@@ -29,3 +31,11 @@ class ContactViewSet(viewsets.ModelViewSet):
 class ContactGroupViewSet(viewsets.ModelViewSet):
     queryset = ContactGroup.objects.all()
     serializer_class = ContactGroupSerializer
+
+
+def delete_contact_view(contact_id):
+    contact = get_object_or_404(Contact, id=contact_id)
+
+    contact.delete()
+
+    return HttpResponse("Contact deleted successfully")
