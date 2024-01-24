@@ -1,4 +1,5 @@
 import pytest
+from django.db import IntegrityError
 from django.urls import reverse
 from rest_framework.test import APIClient
 
@@ -40,3 +41,21 @@ def test_filter_by_last_name(api_client, contact_factory):
     assert len(response.data) == 1
 
     assert response.data[0]['last_name'] == contact_1.last_name
+
+
+@pytest.mark.django_db
+def test_unique_contact():
+    #перший контакт
+    Contact.objects.create(
+        first_name="John",
+        last_name="Doe",
+        phone="555-1234"
+    )
+
+    # Спроба створити контакт з тим самим ім'ям та прізвищем
+    with pytest.raises(IntegrityError):
+        Contact.objects.create(
+            first_name="John",
+            last_name="Doe",
+            phone="555-5678"
+        )
